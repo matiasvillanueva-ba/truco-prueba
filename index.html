@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#140C07">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Truco Anotador</title>
+<!-- Truco Anotador · versión de prueba (Supabase). Ver README.md. La configuración del servidor está en js/config.js. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Ultra&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<main class="phone" id="phone">
+  <div class="wood" id="wood" aria-hidden="true"></div>
+
+  <!-- pestañas -->
+  <section class="scr scroll" id="s-jugar" aria-label="Jugar"></section>
+  <section class="scr scroll" id="s-historial" aria-label="Historial"></section>
+  <section class="scr scroll" id="s-ranking" aria-label="Ranking"></section>
+  <section class="scr scroll" id="s-yo" aria-label="Mi perfil"></section>
+  <!-- vistas apiladas -->
+  <section class="scr scroll" id="s-jugador" aria-label="Perfil de jugador"></section>
+  <section class="scr scroll" id="s-pareja" aria-label="Pareja y cara a cara"></section>
+  <section class="scr scroll" id="s-duelos" aria-label="Duelos"></section>
+  <section class="scr scroll" id="s-frases" aria-label="Frases"></section>
+  <section class="scr scroll" id="s-ajustes" aria-label="Ajustes"></section>
+  <!-- grupos -->
+  <section class="scr scroll" id="s-grupos" aria-label="Grupos"></section>
+  <section class="scr scroll" id="s-grupo" aria-label="Grupo"></section>
+  <section class="scr scroll" id="s-crear" aria-label="Crear grupo"></section>
+  <section class="scr scroll" id="s-invitar" aria-label="Invitar al grupo"></section>
+  <section class="scr scroll" id="s-unirse" aria-label="Unirse a un grupo"></section>
+  <section class="scr scroll" id="s-cuenta" aria-label="Crear cuenta"></section>
+  <section class="scr scroll" id="s-bienvenida" aria-label="Bienvenida"></section>
+  <section class="scr flow" id="s-vivo" aria-label="Partida en vivo, modo lectura"></section>
+  <!-- flujo de partida (sin barra inferior) -->
+  <section class="scr flow" id="s-nueva" aria-label="Elegir jugadores"></section>
+  <section class="scr flow" id="s-equipos" aria-label="Armar equipos"></section>
+  <section class="scr flow" id="s-mesa" aria-label="Sorteo y pre-partida">
+    <header class="hd"><button class="iconbtn pr" id="mesaBack" aria-label="Volver"></button><h1 id="mesaTitle">Sorteo con reyes</h1><span class="iconbtn" style="visibility:hidden" aria-hidden="true"></span></header>
+    <div class="stage" id="mesa">
+      <div class="counter" id="counter"><span id="ctext">Reyes</span><span class="crowns" id="crowns"></span></div>
+      <div class="veil" id="veil"></div>
+      <svg class="filete" id="filete" viewBox="0 0 220 320" aria-hidden="true"></svg>
+      <div class="cap" id="cap"><b></b><span></span></div>
+      <div class="vs" id="vs"><svg viewBox="0 0 64 20" aria-hidden="true"><path d="M2 10h30c8 0 10-7 4-8s-6 6 0 6"/><path d="M40 10h22"/></svg><b>vs</b><svg viewBox="0 0 64 20" aria-hidden="true" style="transform:scaleX(-1)"><path d="M2 10h30c8 0 10-7 4-8s-6 6 0 6"/><path d="M40 10h22"/></svg></div>
+      <p class="vsnote" id="vsnote"></p>
+      <div class="speed" id="speed" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l7 6-7 6zM13 6l7 6-7 6z"/></svg><span id="speedTxt">Tocá la mesa para acelerar</span></div>
+    </div>
+    <section id="pre" class="paper" aria-label="Antes de empezar">
+      <p class="juegan" id="juegan" hidden></p>
+      <div class="team a" id="tA"></div>
+      <div class="split1"></div>
+      <div class="team b" id="tB"></div>
+      <div class="insight">
+        <p id="insight" aria-live="polite"></p>
+        <div class="tg"><span>Lectura del partido</span>
+          <button class="tone" id="spice" role="switch" aria-checked="true"><span class="sw"></span><span id="spiceTxt">Picante</span></button></div>
+      </div>
+      <div class="btns">
+        <button class="ghost pr" id="againBtn">Volver a repartir</button>
+        <button class="cta pr" id="startBtn">Empezar partida</button>
+      </div>
+      <p class="fine">Naipes: baraja Heraclio Fournier 1878 · Dominio público · Bibat – Museo Fournier de Naipes de Álava</p>
+    </section>
+  </section>
+  <section class="scr flow" id="s-game" aria-label="Marcador">
+    <div class="top">
+      <div class="tl"><button class="iconbtn pr" id="exitGame" aria-label="Salir: la partida queda pendiente"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4.2" height="14" rx="1.4"/><rect x="13.8" y="5" width="4.2" height="14" rx="1.4"/></svg></button>
+        <button class="iconbtn pr" id="pasarBtn" hidden aria-label="Pasar el anotador a otro miembro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h4l7-7-4-4-7 7Z"/><path d="M14 18h7M18 15l3 3-3 3"/></svg></button></div>
+      <div class="goal" id="goal">a 30</div>
+      <div class="clock"><i></i><time id="clock" aria-label="Tiempo de partida">00:00</time></div>
+    </div>
+    <div class="board" id="board">
+      <div class="gutter"><button class="undo" id="undo" disabled aria-label="Deshacer el último punto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Deshacer</button></div>
+    </div>
+    <section id="win" aria-live="polite" aria-label="Fin de partida">
+      <div class="wbg" id="wbg"></div><div class="grainw" id="grainw"></div>
+      <svg class="wframe" id="wframe" aria-hidden="true"></svg>
+      <div class="wc">
+        <p class="wg" id="wg">Ganaron</p>
+        <svg class="wname" id="wname" role="img"></svg>
+        <svg class="wbig" id="wbig" viewBox="0 0 190 40" aria-hidden="true"></svg>
+        <div class="cinta" id="cinta"><svg viewBox="0 0 250 72" aria-hidden="true">
+          <path d="M30 22 4 26l12 16L4 58l30-4Z" fill="#B89A5E"/><path d="M220 22l26 4-12 16 12 16-30-4Z" fill="#B89A5E"/>
+          <path d="M30 22 40 30v24l-6 0Z" fill="#6E5428" opacity=".55"/><path d="M220 22l-10 8v24l6 0Z" fill="#6E5428" opacity=".55"/>
+          <path d="M30 14Q125 4 220 14V54Q125 44 30 54Z" fill="#F3E8CF"/>
+          <path d="M36 20Q125 10 214 20M36 48Q125 38 214 48" fill="none" stroke="#C39A45" stroke-width="1.6"/>
+        </svg><span id="wscore"></span></div>
+        <p class="wl" id="wline"></p>
+        <p class="wm" id="wmeta"></p>
+      </div>
+      <div class="wbtns" id="wbtns">
+        <button class="btn main pr" id="rematch">Revancha</button>
+        <button class="btn sec pr" id="winHome">Ir al inicio</button>
+        <button class="btn sec pr" id="winTable">Ver el ranking</button>
+        <button class="btn sec wide pr" id="fix">Me equivoqué, deshacer el último punto</button>
+      </div>
+    </section>
+    <div class="sr" aria-live="polite" id="glive"></div>
+  </section>
+
+  <nav class="tabbar" id="tabbar" aria-label="Secciones">
+    <button data-tab="jugar"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"><rect x="3.5" y="5" width="10" height="15" rx="2" transform="rotate(-10 8.5 12.5)"/><rect x="10.5" y="4" width="10" height="15" rx="2" transform="rotate(8 15.5 11.5)"/></svg></span>Jugar</button>
+    <button data-tab="historial"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>Historial</button>
+    <button data-tab="ranking"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M9 20V8h6v12M3 20v-7h6M15 20v-9h6v9M2 20h20"/></svg></span>Ranking</button>
+    <button data-tab="yo"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20.5c1.2-4 4-6 7.5-6s6.3 2 7.5 6"/></svg></span>Yo</button>
+  </nav>
+
+  <div class="avisos" id="avisos" aria-live="polite"></div>
+  <div class="shade" id="shade" hidden></div>
+  <section class="bsheet paper" id="bsheet" role="dialog" aria-modal="true" aria-labelledby="bsTitle" hidden><h2 id="bsTitle"></h2><div id="bsBody"></div><div class="bsActs" id="bsActs"></div></section>
+
+  <div class="toast" id="toast" role="status"><span id="toastTxt"></span><button id="toastBtn" hidden>Deshacer</button></div>
+  <p class="sr" id="live" aria-live="polite"></p>
+</main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs id="gdefs">
+    <linearGradient id="letraCrema" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFF8E6"/><stop offset=".55" stop-color="#F3E8CF"/><stop offset=".56" stop-color="#E6D2A4"/><stop offset="1" stop-color="#D9C08A"/>
+    </linearGradient>
+    <linearGradient id="laca" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B221A"/><stop offset="1" stop-color="#0F0B08"/></linearGradient>
+    <linearGradient id="areaA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CF3A1F" stop-opacity=".28"/><stop offset="1" stop-color="#CF3A1F" stop-opacity="0"/></linearGradient>
+  </defs>
+</svg>
+
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js" integrity="sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O" crossorigin="anonymous"></script>
+<script src="js/logic.js"></script>
+<script src="js/grupos.js"></script>
+<script src="js/backend_supabase.js"></script>
+<script src="js/ink.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
