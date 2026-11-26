@@ -56,6 +56,9 @@ const sinEsquema = e => !!e && (e.code === 'PGRST202' || e.code === '42883' || /
 function errAuth(e) {
   if (!e) return 'error';
   const c = e.code || '', m = String(e.message || ''), st = +e.status || 0;
+  // Supabase devuelve 500 "Error sending … email" cuando no puede mandar el mail (ej. el envío por defecto
+  // solo llega a miembros del proyecto). No es falta de conexión: va antes del chequeo de transitorio.
+  if (/error sending .*email/i.test(m) || c === 'email_address_not_authorized' || /not authorized/i.test(m)) return 'smtp';
   if (esTransitorio(e) && st !== 429) return 'red';
   if (c === 'over_email_send_rate_limit' || c === 'over_request_rate_limit' || st === 429 || /rate limit|security purposes/i.test(m)) return 'espera';
   if (c === 'email_exists' || c === 'user_already_exists' || /already (been )?registered|already exists/i.test(m)) return 'usado';
